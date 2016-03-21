@@ -15,7 +15,8 @@ import (
 
 var outFile = flag.String("o", "./output.db", "specify output sqlite file")
 
-const createTableSql = "CREATE TABLE IF NOT EXISTS sales (id INTEGER PRIMARY KEY, Address TEXT, Suburb TEXT, Date DATE, Value TEXT)"
+const salesTable = "sales"
+const createTableSql = "CREATE TABLE IF NOT EXISTS " + salesTable + " (id INTEGER PRIMARY KEY, Address TEXT, Suburb TEXT, Date DATE, Value TEXT)"
 const dateLayout = "1/2/06"
 
 // returns true if all strings in a slice are empty strings
@@ -42,14 +43,14 @@ func processFile(in io.Reader, tx *sql.Tx) error {
 	}
 
 	// insert values. does nothing, if id already exists
-	stmtInsert, err := tx.Prepare("INSERT OR IGNORE INTO sales VALUES(?, ?, ?, ?, ?);")
+	stmtInsert, err := tx.Prepare("INSERT OR IGNORE INTO " + salesTable + " VALUES(?, ?, ?, ?, ?);")
 	if err != nil {
 		return err
 	}
 	defer stmtInsert.Close()
 
 	// update values in case the date is newer or equal
-	stmtUpdate, err := tx.Prepare("UPDATE sales SET address=?, suburb=?, Date=?, Value=? WHERE id=? AND Date<=?")
+	stmtUpdate, err := tx.Prepare("UPDATE " + salesTable + " SET address=?, suburb=?, Date=?, Value=? WHERE id=? AND Date<=?")
 	if err != nil {
 		return err
 	}
@@ -88,6 +89,29 @@ func processFile(in io.Reader, tx *sql.Tx) error {
 			return err
 		}
 	}
+	return nil
+}
+
+func printSalesTable(db *sql.DB) error {
+	rows, err := db.Query("SELECT * FROM " + salesTable)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var address, suburb, value string
+		var date time.Time
+		if err := rows.Scan(&id, &address, &suburb, &date, &value); err != nil {
+			return err
+		}
+		fmt.Printf("%v, %v, %v, %v, %v\n", id, address, suburb, date, value)
+	}
+	if err := rows.Err(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -134,5 +158,9 @@ func main() {
 			tx.Commit()
 			file.Close()
 		}
+	}
+
+	if err := printSalesTable(db); err != nil {
+		log.Fatal(err)
 	}
 }

@@ -293,4 +293,3 @@ id,Street address,Town,Valuation date,Value
 95,1 Warbler LANE,ALBERT TOWN,1/01/16,470000
 96,1 Balneaves LANE,WANAKA,1/01/16,310000
 97,1 Mill Green,Arrowtown,1/01/16,860000
-97,1 Mill Green,Arrowtown,1/01/15,666
