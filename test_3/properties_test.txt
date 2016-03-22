@@ -95,7 +95,6 @@ id,Street address,Town,Valuation date,Value
 94,1 Poppy LANE,ALBERT TOWN,1/01/15,395000
 95,1 Warbler LANE,ALBERT TOWN,1/01/15,410000
 96,1 Balneaves LANE,WANAKA,1/01/15,250000
-97,1 Mill Green,Arrowtown,1/01/15,800000
 ,,,,
 ,,,,
 1,1 Northburn RD,WANAKA,1/01/15,330000
@@ -292,4 +291,3 @@ id,Street address,Town,Valuation date,Value
 94,1 Poppy LANE,ALBERT TOWN,1/01/16,455000
 95,1 Warbler LANE,ALBERT TOWN,1/01/16,470000
 96,1 Balneaves LANE,WANAKA,1/01/16,310000
-97,1 Mill Green,Arrowtown,1/01/16,860000
